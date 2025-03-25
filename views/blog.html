@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Blog Page</h1>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+        <a href="/blog">Blog</a>
+    </nav>
+
+    <div id="blog-container">
+        <h2>Loading posts...</h2>
+    </div>
+
+    <script>
+        // Fetching blog data from the server
+        fetch('/api/posts')
+            .then(response => response.json())
+            .then(posts => {
+                const blogContainer = document.getElementById('blog-container');
+                blogContainer.innerHTML = ''; // Clear loading text
+
+                posts.forEach(post => {
+                    const postElement = `
+                        <article>
+                            <h2>${post.title}</h2>
+                            <p><strong>${post.date}</strong> by ${post.author}</p>
+                            <p>${post.content}</p>
+                            <hr/>
+                        </article>
+                    `;
+                    blogContainer.innerHTML += postElement;
+                });
+            })
+            .catch(error => {
+                console.error('Error loading blog posts:', error);
+                document.getElementById('blog-container').innerHTML = "<p>Failed to load blog posts.</p>";
+            });
+    </script>
+</body>
+</html>
